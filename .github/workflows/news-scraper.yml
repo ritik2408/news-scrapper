@@ -2,7 +2,7 @@ name: News Scraper
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Every 20 minutes
+    - cron: '*/30 * * * *'  # Every 30 minutes
   workflow_dispatch:
 
 jobs:
@@ -22,5 +22,12 @@ jobs:
         pip install -r requirements.txt
         
     - name: Run scraper
-
       run: python a.py
+      
+    - name: Commit and push updated articles
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add seen_articles_shiksha.json
+        git diff --staged --quiet || git commit -m "Update seen articles [skip ci]"
+        git push
