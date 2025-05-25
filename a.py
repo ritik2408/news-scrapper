@@ -169,18 +169,17 @@ def scrape_articles(url):
         return []
 
 def main():
-    """Main loop to check for new articles and send emails."""
+    """Run the scraper once - suitable for GitHub Actions scheduling."""
     logging.info("Starting Shiksha news monitoring script")
+    
+    try:
+        new_articles = scrape_articles(WEBSITE_URL)
 
-    while True:
-        try:
-            new_articles = scrape_articles(WEBSITE_URL)
+        for article_info in new_articles:
+            title, url, author, date = article_info
 
-            for article_info in new_articles:
-                title, url, author, date = article_info
-                
-                subject = f"New Shiksha Article: {title[:50]}..."
-                body = f"""New article found on Shiksha.com:
+            subject = f"New Shiksha Article: {title[:50]}..."
+            body = f"""New article found on Shiksha.com:
 
 Title: {title}
 Author: {author}
@@ -189,23 +188,19 @@ URL: {url}
 
 ---
 Shiksha News Monitor"""
-                
-                send_email(subject, body)
 
-            if new_articles:
-                logging.info(f"Sent {len(new_articles)} email(s) for new articles")
-            else:
-                logging.info("No new articles found")
+            send_email(subject, body)
 
-            logging.info(f"Waiting {CHECK_INTERVAL} seconds until next check")
-            time.sleep(CHECK_INTERVAL)
-
-        except KeyboardInterrupt:
-            logging.info("Script stopped by user")
-            break
-        except Exception as e:
-            logging.error(f"Main loop error: {e}")
-            time.sleep(CHECK_INTERVAL)
+        if new_articles:
+            logging.info(f"Sent {len(new_articles)} email(s) for new articles")
+        else:
+            logging.info("No new articles found")
+            
+        logging.info("Script completed successfully")
+            
+    except Exception as e:
+        logging.error(f"Error during execution: {e}")
+        raise  # Re-raise to make GitHub Actions aware of the failure
 
 if __name__ == "__main__":
     main()

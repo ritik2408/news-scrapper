@@ -2,7 +2,7 @@ name: News Scraper
 
 on:
   schedule:
-    - cron: '*/25 * * * *'  # Every 25 minutes
+    - cron: '*/20 * * * *'  # Every 20 minutes
   workflow_dispatch:
 
 jobs:
@@ -22,4 +22,5 @@ jobs:
         pip install -r requirements.txt
         
     - name: Run scraper
+
       run: python a.py
