@@ -1,4 +1,3 @@
 .env
-seen_articles_shiksha.json
 __pycache__/
 *.pyc

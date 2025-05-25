@@ -19,7 +19,6 @@ SMTP_PORT = 587
 
 WEBSITE_URL = "https://www.shiksha.com/news/exams/" 
 BASE_URL = "https://www.shiksha.com/"  # Base URL for absolute URLs
-CHECK_INTERVAL = 600  # Check every 10 minutes (600 seconds)
 ARTICLE_FILE = "seen_articles_shiksha.json"  # File to store seen articles
 
 def load_seen_articles():
