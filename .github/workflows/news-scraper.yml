@@ -30,6 +30,6 @@ jobs:
         SMTP_PORT: ${{ secrets.SMTP_PORT }}
         WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
         BASE_URL: ${{ secrets.BASE_URL }}
-        CHECK_INTERVAL: ${{ secrets.CHECK_INTERVAL }}
+        # Remove CHECK_INTERVAL from here since GitHub Actions shouldn't run infinite loops
         ARTICLE_FILE: ${{ secrets.ARTICLE_FILE }}
       run: python a.py

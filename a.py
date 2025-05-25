@@ -19,7 +19,8 @@ SMTP_PORT = os.getenv("SMTP_PORT", "587")
 
 WEBSITE_URL = os.getenv("WEBSITE_URL", "https://www.shiksha.com/news/exams/")
 BASE_URL = os.getenv("BASE_URL", "https://www.shiksha.com/")
-CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "600"))  
+check_interval_str = os.getenv("CHECK_INTERVAL", "600")
+CHECK_INTERVAL = int(check_interval_str) if check_interval_str.strip() else 600
 ARTICLE_FILE = os.getenv("ARTICLE_FILE", "seen_articles_shiksha.json")
 
 def load_seen_articles():
