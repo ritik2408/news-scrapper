@@ -1,0 +1,35 @@
+name: News Scraper
+
+on:
+  schedule:
+    - cron: '*/25 * * * *'  # Every 25 minutes
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Run scraper
+      env:
+        EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+        CHECK_INTERVAL: ${{ secrets.CHECK_INTERVAL }}
+        ARTICLE_FILE: ${{ secrets.ARTICLE_FILE }}
+      run: python a.py
