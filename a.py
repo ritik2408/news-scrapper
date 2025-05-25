@@ -15,7 +15,7 @@ EMAIL_SENDER = os.getenv("EMAIL_SENDER")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_PORT = os.getenv("SMTP_PORT", "587")
 
 WEBSITE_URL = os.getenv("WEBSITE_URL", "https://www.shiksha.com/news/exams/")
 BASE_URL = os.getenv("BASE_URL", "https://www.shiksha.com/")
