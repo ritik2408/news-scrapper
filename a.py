@@ -1,4 +1,3 @@
-import os
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -11,17 +10,17 @@ from urllib3.util.retry import Retry
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-EMAIL_SENDER = os.getenv("EMAIL_SENDER", "shivamy4020@gmail.com")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "bkpsqukoalgblwul")
-EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = os.getenv("SMTP_PORT", "587")
+EMAIL_SENDER = "shivamy4020@gmail.com"  
+EMAIL_PASSWORD = "bkps quko algb lwul"   
+EMAIL_RECEIVER = "shivam.yadav@collegedunia.com"  
+SMTP_SERVER = "smtp.gmail.com"       
+SMTP_PORT = 587                       
 
-WEBSITE_URL = os.getenv("WEBSITE_URL", "https://www.shiksha.com/news/exams/")
-BASE_URL = os.getenv("BASE_URL", "https://www.shiksha.com/")
-check_interval_str = os.getenv("CHECK_INTERVAL", "600")
-CHECK_INTERVAL = int(check_interval_str) if check_interval_str.strip() else 600
-ARTICLE_FILE = os.getenv("ARTICLE_FILE", "seen_articles_shiksha.json")
+
+WEBSITE_URL = "https://www.shiksha.com/news/exams/" 
+BASE_URL = "https://www.shiksha.com/"  # Base URL for absolute URLs
+CHECK_INTERVAL = 600  # Check every 10 minutes (600 seconds)
+ARTICLE_FILE = "seen_articles_shiksha.json"  # File to store seen articles
 
 def load_seen_articles():
     """Load previously seen articles from JSON file."""
@@ -101,22 +100,22 @@ def scrape_articles(url):
                 title_section = article.find('h3', class_='articleTitle')
                 if not title_section:
                     continue
-
+                
                 # Find the link within the title section
                 link_elem = title_section.find('a')
                 if not link_elem:
                     continue
-
+                
                 # Extract title text (remove LIVE indicators and clean up)
                 title = link_elem.get_text().strip()
                 # Remove "LIVE" text if present
                 title = title.replace('LIVE', '').strip()
-
+                
                 # Extract URL
                 url_path = link_elem.get('href', '')
                 if not url_path:
                     continue
-
+                
                 # Ensure URL is absolute
                 if url_path.startswith('/'):
                     full_url = BASE_URL.rstrip('/') + url_path
@@ -124,30 +123,30 @@ def scrape_articles(url):
                     full_url = url_path
                 else:
                     full_url = BASE_URL.rstrip('/') + '/' + url_path
-
+                
                 # Extract author and date information if available
                 author_info = article.find('div', class_='authorInfo')
                 author = 'N/A'
                 date = 'N/A'
-
+                
                 if author_info:
                     author_link = author_info.find('a')
                     if author_link:
                         author = author_link.get_text().strip()
-
+                    
                     date_elem = author_info.find('strong', class_='articelUpdatedDate')
                     if date_elem:
                         date = date_elem.get_text().strip()
-
+                
                 # Create article tuple with additional info
                 article_tuple = (title, full_url, author, date)
-
+                
                 # Check if this is a new article
                 simple_tuple = (title, full_url)  # For backward compatibility
                 if simple_tuple not in seen_articles and title and full_url:
                     new_articles.append(article_tuple)
                     logging.info(f"New article found: {title[:60]}...")
-
+                
             except Exception as e:
                 logging.error(f"Error processing article {i}: {e}")
                 continue
@@ -179,7 +178,7 @@ def main():
 
             for article_info in new_articles:
                 title, url, author, date = article_info
-
+                
                 subject = f"New Shiksha Article: {title[:50]}..."
                 body = f"""New article found on Shiksha.com:
 
@@ -190,7 +189,7 @@ URL: {url}
 
 ---
 Shiksha News Monitor"""
-
+                
                 send_email(subject, body)
 
             if new_articles:
